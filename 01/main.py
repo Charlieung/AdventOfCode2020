@@ -34,7 +34,7 @@ def solve_two(expense_report, total):
             continue
         else:
             logging.info(f'{x} * {product} = {x * product}')
-            return product
+            return x * product
 
 if __name__ == '__main__':
     # setup
