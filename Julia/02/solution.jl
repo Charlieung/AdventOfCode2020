@@ -1,24 +1,28 @@
 function solve_one(password_policies::Array{Tuple{Int64, Int64, Char, String}, 1})::Int64
-	valid_policies = 0
-	for password_policy in password_policies
+	
+	function is_password_valid(password_policy)
 		min, max, letter, password = password_policy 
 		letter_count = count(i->(i==letter), password)
-		if min <= letter_count <= max
-			valid_policies += 1
-		end
+		valid = min <= letter_count <= max 
+		return valid
 	end
+
+	valid_policies = sum(is_password_valid.(password_policies))
+
 	@info(valid_policies)
     return valid_policies
 end
 
 function solve_two(password_policies::Array{Tuple{Int64, Int64, Char, String}, 1})::Int64
-	valid_policies = 0
-	for password_policy in password_policies
+	
+	function is_password_valid(password_policy)
 		min, max, letter, password = password_policy 
-		if xor(password[min] == letter, password[max] == letter) 
-			valid_policies += 1
-		end
+		valid = xor(password[min] == letter, password[max] == letter) 
+		return valid
 	end
+
+	valid_policies = sum(is_password_valid.(password_policies))	
+
 	@info(valid_policies)
     return valid_policies
 end
