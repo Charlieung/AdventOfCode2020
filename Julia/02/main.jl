@@ -7,8 +7,7 @@ f = open(input_path, "r")
 lines = readlines(f)
 
 # init array of types.
-password_policies = [(1, 3, 'a', "abcde")]
-pop!(password_policies)
+password_policies = Tuple{Int64, Int64, Char, String}[]
 
 for line in lines
 	policy, password = split(line, ": ")

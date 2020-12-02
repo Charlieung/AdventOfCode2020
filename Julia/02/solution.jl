@@ -1,4 +1,4 @@
-function solve_one(password_policies::Array{Tuple{Int64, Int64, Char, String}, 1})::Union{Int64, Nothing}
+function solve_one(password_policies::Array{Tuple{Int64, Int64, Char, String}, 1})::Int64
 	valid_policies = 0
 	for password_policy in password_policies
 		min, max, letter, password = password_policy 
@@ -11,7 +11,7 @@ function solve_one(password_policies::Array{Tuple{Int64, Int64, Char, String}, 1
     return valid_policies
 end
 
-function solve_two(password_policies::Array{Tuple{Int64, Int64, Char, String}, 1})::Union{Int64, Nothing}
+function solve_two(password_policies::Array{Tuple{Int64, Int64, Char, String}, 1})::Int64
 	valid_policies = 0
 	for password_policy in password_policies
 		min, max, letter, password = password_policy 
