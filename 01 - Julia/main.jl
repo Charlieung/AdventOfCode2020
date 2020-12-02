@@ -2,7 +2,6 @@ include("solution.jl")
 
 # setup
 current_directory = dirname(@__FILE__)
-@info(current_directory)
 input_path = string(current_directory, "/input.txt")
 f = open(input_path, "r")
 lines = readlines(f)
