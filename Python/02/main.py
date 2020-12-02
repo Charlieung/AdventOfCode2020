@@ -1,4 +1,5 @@
 import os, logging
+import numpy as np
 from datetime import datetime as dt
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(message)s')
@@ -15,22 +16,79 @@ def timeit(f):
 
 @timeit
 def solve_one(password_policies):
-    valid_passwords = 0
-    for password_policy in password_policies:
-        min, max, letter, password = password_policy
-        letter_count = password.count(letter)
-        if min <= letter_count <= max:
-            valid_passwords += 1
+    
+    broadcast = lambda x: np.repeat(x, 20).reshape((password_count, 20))
+
+    password_policies = np.array(
+        password_policies, 
+        dtype=np.dtype([
+            ('first', np.int64),
+            ('second', np.int64),
+            ('letter', '<U1'),
+            ('password', 'U20'),
+        ])
+    )
+
+    password_count = len(password_policies)
+    first = password_policies['first']
+    second = password_policies['second']
+    letter = password_policies['letter']
+    password = password_policies['password']
+    password = np.char.ljust(password, 20)\
+        .view('<U1')\
+        .reshape((password_count, -1))
+
+    broadcast = lambda x: np.repeat(x, 20).reshape((password_count, 20))
+    matches = np.char.equal(password, broadcast(letter))
+    match_counts = np.sum(matches, axis=1)
+
+    valid_passwords = np.sum(np.logical_and(
+        match_counts >= first, 
+        match_counts <= second, 
+    ))
     logging.info(f'Valid Passwords: {valid_passwords}')
     return valid_passwords
 
 @timeit
 def solve_two(password_policies):
-    valid_passwords = 0
-    for password_policy in password_policies:
-        min, max, letter, password = password_policy
-        if (password[min - 1] == letter) ^ (password[max - 1] == letter):
-            valid_passwords += 1
+
+    broadcast = lambda x: np.repeat(x, 20).reshape((password_count, 20))
+
+    password_policies = np.array(
+        password_policies, 
+        dtype=np.dtype([
+            ('first', np.int64),
+            ('second', np.int64),
+            ('letter', '<U1'),
+            ('password', 'U20'),
+        ])
+    )
+
+    password_count = len(password_policies)
+    first = password_policies['first']
+    second = password_policies['second']
+    letter = password_policies['letter']
+    password = password_policies['password']
+    password = np.char.ljust(password, 20)\
+        .view('<U1')\
+        .reshape((password_count, -1))
+
+    matches = np.char.equal(password, broadcast(letter))
+
+    indexer = np.arange(20) \
+        .repeat(password_count) \
+        .reshape(20, password_count) \
+        .transpose() + 1
+
+    mask = np.logical_or(
+        indexer == broadcast(first), 
+        indexer == broadcast(second)
+    )
+
+    valid_passwords = np.sum(np.sum(
+        np.logical_and(matches, mask), 
+        axis=1) == 1)
+
     logging.info(f'Valid Passwords: {valid_passwords}')
     return valid_passwords
 
