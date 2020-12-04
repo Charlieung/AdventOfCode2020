@@ -126,6 +126,38 @@ class Passport:
         valid = True
         self._cid = input, valid
 
+    @byr.getter
+    def byr(self):
+        return self.byr[0]
+
+    @iyr.getter
+    def iyr(self):
+        return self.iyr[0]
+
+    @eyr.getter
+    def eyr(self):
+        return self.eyr[0]
+
+    @hgt.getter
+    def hgt(self):
+        return self.hgt[0]
+
+    @hcl.getter
+    def hcl(self):
+        return self.hcl[0]
+
+    @ecl.getter
+    def ecl(self):
+        return self.ecl[0]
+
+    @pid.getter
+    def pid(self):
+        return self.pid[0]
+
+    @cid.getter
+    def cid(self):
+        return self.cid[0]
+
     def is_valid(self):
         conditions = [
             self._byr[1],
