@@ -1,5 +1,5 @@
 import pytest
-from main import solve_one, solve_two
+from main import solve_one, solve_two, parse_input
 from passport import Passport
 
 @pytest.fixture
@@ -19,60 +19,56 @@ def passports():
     hcl:#cfa07d eyr:2025 pid:166559648
     iyr:2011 ecl:brn hgt:59in
     """.strip().replace('    ', '')
-    records = passport_text.split('\n\n')
-    records = [record.replace('\n', ' ').split(' ') for record in records]
-    passports = []
-    for record in records:
-        passport = {}
-        for entry in record:
-            key, value = entry.split(':')
-            passport[key] = value
-        passports.append(passport)
+    passports = parse_input(passport_text)
     return passports
 
 @pytest.fixture
-def fields():
-    return {
-        'byr': 'Birth Year',
-        'iyr': 'Issue Year',
-        'eyr': 'Expiration Year',
-        'hgt': 'Height',
-        'hcl': 'Hair Color',
-        'ecl': 'Eye Color',
-        'pid': 'Passport ID',
-        'cid': 'Country ID',
-    }
+def valid_passports():
+    passport_text = """
+    pid:087499704 hgt:74in ecl:grn iyr:2012 eyr:2030 byr:1980
+    hcl:#623a2f
 
-def test_passport():
-    passport = Passport(**{
-        'ecl': 'gry',
-        'pid': '860033327',
-        'eyr': '2020',
-        'hcl': '#fffffd',
-        'byr': '1937',
-        'iyr': '2017',
-        'cid': '147',
-        'hgt': '183cm',
-    })
-    assert passport
+    eyr:2029 ecl:blu cid:129 byr:1989
+    iyr:2014 pid:896056539 hcl:#a97842 hgt:165cm
 
-def test_passport_validation():
-    passport = Passport(**{
-        'ecl': 'gry',
-        'pid': '860033327',
-        'eyr': '2020',
-        'hcl': '#fffffd',
-        'byr': '1937',
-        'iyr': '2017',
-        'cid': '147',
-        'hgt': '183in',
-    })
-    assert not passport.is_valid()
+    hcl:#888785
+    hgt:164cm byr:2001 iyr:2015 cid:88
+    pid:545766238 ecl:hzl
+    eyr:2022
+
+    iyr:2010 hgt:158cm hcl:#b6652a ecl:blu byr:1944 eyr:2021 pid:093154719
+    """.strip().replace('    ', '')
+    passports = parse_input(passport_text)
+    return passports
+
+@pytest.fixture
+def invalid_passports():
+    passport_text = """
+    eyr:1972 cid:100
+    hcl:#18171d ecl:amb hgt:170 pid:186cm iyr:2018 byr:1926
+
+    iyr:2019
+    hcl:#602927 eyr:1967 hgt:170cm
+    ecl:grn pid:012533040 byr:1946
+
+    hcl:dab227 iyr:2012
+    ecl:brn hgt:182cm pid:021572410 eyr:2020 byr:1992 cid:277
+
+    hgt:59cm ecl:zzz
+    eyr:2038 hcl:74454a iyr:2023
+    pid:3556412378 byr:2007
+    """.strip().replace('    ', '')
+    passports = parse_input(passport_text)
+    return passports
 
 def test_solve_one(passports):
     valid_passports = solve_one(passports)
     assert valid_passports == 2
 
-def test_solve_two(passports):
-    valid_passports = solve_two(passports)
-    assert valid_passports == 2
+def test_solve_two_valid(valid_passports):
+    valid_passports = solve_two(valid_passports)
+    assert valid_passports == 4
+
+def test_solve_two_invalid(invalid_passports):
+    valid_passports = solve_two(invalid_passports)
+    assert valid_passports == 0

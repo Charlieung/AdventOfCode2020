@@ -14,6 +14,18 @@ def timeit(f):
         return result
     return wrap
 
+def parse_input(passport_text):
+    records = passport_text.split('\n\n')
+    records = [record.replace('\n', ' ').split(' ') for record in records]
+    passports = []
+    for record in records:
+        passport = {}
+        for entry in record:
+            key, value = entry.split(':')
+            passport[key] = value
+        passports.append(passport)
+    return passports
+
 @timeit
 def solve_one(passports):
     valid_passports = 0
@@ -47,15 +59,7 @@ if __name__ == '__main__':
     current_directory = os.path.dirname(__file__) or os.curdir
     with open(f'{current_directory}/input.txt') as f:
         passport_text = f.read().strip()
-    records = passport_text.split('\n\n')
-    records = [record.replace('\n', ' ').split(' ') for record in records]
-    passports = []
-    for record in records:
-        passport = {}
-        for entry in record:
-            key, value = entry.split(':')
-            passport[key] = value
-        passports.append(passport)
+    passports = parse_input(passport_text)
 
     # part 1
     logging.info('[Part 1]')
