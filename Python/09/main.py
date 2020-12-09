@@ -38,15 +38,18 @@ def solve_one(transmission, window):
 
 @timeit
 def solve_two(transmission, number):
-    possibilities = [option for option in transmission if option < number]
-    print(possibilities)
-    combinations = itertools.chain(*map(lambda x: itertools.combinations(possibilities, x), range(0, len(possibilities)+1)))
-    for combo in combinations:
-        if sum(combo) == number:
-            break
-    weakness = min(combo) + max(combo)
-    logging.info(f'Weakness: {weakness}')
-    return weakness
+    for start in range(len(transmission)):
+        for window in range(len(transmission)):
+            section = transmission[start:start+window]
+            total = sum(section)
+            if total == number:
+                weakness = min(section) + max(section)
+                logging.info(f'Weakness: {weakness}')
+                return weakness
+            elif total > number: # start was wrong
+                break
+
+
 
 if __name__ == '__main__':
 
@@ -58,7 +61,7 @@ if __name__ == '__main__':
     # part 1
     logging.info('[Part 1]')
     window = 25
-    solve_one(transmission, window)
+    number = solve_one(transmission, window)
 
     # part 2
     logging.info('[Part 2]')
