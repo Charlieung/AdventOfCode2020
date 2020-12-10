@@ -141,6 +141,10 @@ cython_debug/
 .vs/
 *.sln
 *.pyproj
+.vscode/
+*.pdb
+*.exe
+.ilk
 
 # Notebook
 *.ipynb
