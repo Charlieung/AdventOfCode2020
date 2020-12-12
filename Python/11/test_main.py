@@ -3,7 +3,7 @@ import pytest
 from main import parse_input, solve_one, solve_two
 
 @pytest.fixture
-def c():
+def seat_layout():
     input = """
     L.LL.LL.LL
     LLLLLLL.LL
