@@ -20,7 +20,7 @@ def seat_layout():
     return seat_layout
 
 def test_solve_one(seat_layout):
-    assert solve_one(seat_layout) == 35
+    assert solve_one(seat_layout) == 37
 
 def test_solve_two(seat_layout):
-    assert solve_two(seat_layout) == 8
+    assert solve_two(seat_layout) == 26
