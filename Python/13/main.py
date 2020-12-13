@@ -36,7 +36,7 @@ def solve_one(departure_time, schedules):
     return product
 
 @timeit
-def solve_two_old(schedules):
+def solve_two_brute_force(schedules):
     schedules = np.where(np.isnan(schedules), 1, schedules)
     schedules = schedules[~np.isnan(schedules)] # Remove Null
     offsets = np.arange(len(schedules))
@@ -56,6 +56,7 @@ def solve_two_old(schedules):
 
 @timeit
 def solve_two(schedules):
+    # Implementation of Chinese Remainder Theorem
     where_has_schedule = ~np.isnan(schedules)
     remainders = np.arange(len(schedules))[where_has_schedule]
     schedules = schedules[where_has_schedule]
