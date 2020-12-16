@@ -1,6 +1,7 @@
 import os, logging
 import numpy as np
 
+import numba
 from datetime import datetime as dt
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(message)s')
@@ -20,13 +21,21 @@ def parse_input(input):
     return starting_numbers
 
 @timeit
-def solve_one(starting_numbers, index):
+@numba.njit
+def solve(starting_numbers, index):
     # init values
-    memory = {k: v for (v, k) in zip(range(len(starting_numbers)), starting_numbers)}
+    memory = numba.typed.Dict.empty(
+        key_type=numba.types.int64,
+        value_type=numba.types.int64,
+    )
+    for i in np.arange(len(starting_numbers)):
+        value = starting_numbers[i]
+        memory[value] = i
+
     start = len(starting_numbers)
     last_insertion = None # flag to keep track if last number was new
     # iterate and keep track of unique indices
-    for i in range(start, index):
+    for i in np.arange(start, index):
         if last_insertion is None:
             spoken_number = 0
         else:
@@ -34,11 +43,17 @@ def solve_one(starting_numbers, index):
         last_insertion = memory.get(spoken_number)
         memory[spoken_number] = i
     number = spoken_number
+    return number
+
+
+def solve_one(starting_numbers, index):
+    number = solve(starting_numbers, index)
     logging.info(f'{index}th Number: {number}')
     return number
 
 def solve_two(starting_numbers, index):
-    number = solve_one(starting_numbers, index)
+    number = solve(starting_numbers, index)
+    logging.info(f'{index}th Number: {number}')
     return number
 
 
