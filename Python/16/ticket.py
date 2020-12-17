@@ -1,8 +1,5 @@
-# import numba
-import struct
 import numpy as np
 
-from itertools import permutations
 from collections import namedtuple
 
 class TicketFactory:
