@@ -3,6 +3,7 @@ import numpy as np
 
 from datetime import datetime as dt
 from grid import Grid
+from hypergrid import HyperGrid
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(message)s')
 
@@ -37,7 +38,12 @@ def solve_one(initial_state, cycles):
 
 @timeit
 def solve_two(initial_state, cycles):
-    answer = 0
+    hypergrid = HyperGrid(initial_state)
+    print(hypergrid)
+    for _ in range(cycles):
+        hypergrid.cycle()
+
+    answer = hypergrid.count_active_cubes()
     logging.info(f'Answer = {answer}')
     return answer
 

@@ -18,7 +18,7 @@ def test_solve_one(initial_state):
     result = solve_one(initial_state, cycles)
     assert result == 112
 
-# def test_solve_two(initial_state):
-#     cycles = 6
-#     result = solve_two(initial_state, cycles)
-#     assert result == 112
+def test_solve_two(initial_state):
+    cycles = 6
+    result = solve_two(initial_state, cycles)
+    assert result == 848
